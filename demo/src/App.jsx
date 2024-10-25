@@ -6,6 +6,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import SignUp from './component/SignUp'
 import Home from './component/Home'
 import SignIn from './component/SignIn'
+import PrivateRoute from './component/PrivateRoute'
+import Profile from './component/Profile'
+import About from './component/About'
 
 function App() {
 
@@ -13,15 +16,20 @@ function App() {
 
   return (
     <>
-    <BrowserRouter>
+      <BrowserRouter>
         <Header />
         <Routes>
-          <Route path='/' element={<Home />}/>
-          <Route path='/signup' element={<SignUp />}/>
-          <Route path='/sign-in' element={<SignIn />}/>
+          <Route path='/sign-up' element={<SignUp />} />
+          <Route path='/sign-in' element={<SignIn />} />
+          <Route path='/about' element={<About />}/>
+          <Route element={<PrivateRoute />}>
+            <Route path='/' element={<Home />} />
+            <Route path='/profile' element={<Profile />} />
+          </Route>
+
 
         </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
     </>
   )
 }
