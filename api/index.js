@@ -5,14 +5,14 @@ import dotenv from "dotenv";
 import cookieParser from 'cookie-parser';
 import path, { dirname } from 'path';
 // Uncomment the following line if you want to enable CORS
-// import cors from 'cors';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 
-// Uncomment the following line to use CORS
-// app.use(cors());
+// Uncomment the following line to use CORS if necessary
+app.use(cors());
 
 // MongoDB Connection
 mongoose
@@ -24,18 +24,20 @@ mongoose
     console.error("MongoDB connection error:", err);
   });
 
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
 
 // Serve static files from the 'demo/dist' directory
-app.use(express.static(path.join(dirname(new URL(import.meta.url).pathname), 'demo', 'dist')));
+const distPath = path.join(dirname(new URL(import.meta.url).pathname), 'demo', 'dist');
+app.use(express.static(distPath));
 
 // Authentication routes
 app.use('/api/auth', authRouter);
 
 // Handle any other routes and serve index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(dirname(new URL(import.meta.url).pathname), 'demo', 'dist', 'index.html'));
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
 // Error-handling middleware
