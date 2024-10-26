@@ -2,47 +2,46 @@ import express from "express";
 import mongoose from "mongoose";
 import authRouter from './routes/auth.route.js';
 import dotenv from "dotenv";
-import cookieParser from 'cookie-parser';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import cookieParser from 'cookie-parser'
+import path from 'path'
 
 dotenv.config();
 
-// Define __dirname in ES module scope
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
 const app = express();
 
+
+mongoose
+.connect(process.env.MONGO_URL)
+.then(() => {
+  console.log("Connected to MongoDB");
+})
+.catch((err) => {
+  console.log(err);
+});
+
+const __direname = path.resolve()
+
 app.use(express.json());
-app.use(cookieParser());
 
-// Uncomment this if you are using CORS
-// app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cookieParser())
 
-// Start the server
+// app.use(cors({ origin: 'http://localhost:5173' })); // Allow requests from your frontend
+  
+
+app.use('/api/auth', authRouter);
+
+
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
 
 // Routes
-app.use('/api/auth', authRouter);
 
-app.use(express.static(path.join(__dirname, 'demo', 'dist')));
+app.use(express.static(path.join(__direname, '/demo/dist'))) 
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'demo', 'dist', 'index.html'));
-});
+ app.get('*',  (req, res) => {
+res.sendFile(path.join(__dirname, 'demo', 'dist' , 'index.html'))
+ })
 
 // Error-handling middleware
 app.use((err, req, res, next) => {
