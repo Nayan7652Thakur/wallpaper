@@ -4,11 +4,15 @@ import authRouter from './routes/auth.route.js';
 import dotenv from "dotenv";
 import cookieParser from 'cookie-parser';
 import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
+// Uncomment the following line if you want to enable CORS
+// import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
+
+// Uncomment the following line to use CORS
+// app.use(cors());
 
 // MongoDB Connection
 mongoose
@@ -17,29 +21,26 @@ mongoose
     console.log("Connected to MongoDB");
   })
   .catch((err) => {
-    console.log(err);
+    console.error("MongoDB connection error:", err);
   });
-
-// Define __dirname for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 app.use(express.json());
 app.use(cookieParser());
 
 // Serve static files from the 'demo/dist' directory
-app.use(express.static(path.join(__dirname, 'demo', 'dist')));
+app.use(express.static(path.join(dirname(new URL(import.meta.url).pathname), 'demo', 'dist')));
 
 // Authentication routes
 app.use('/api/auth', authRouter);
 
 // Handle any other routes and serve index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'demo', 'dist', 'index.html'));
+  res.sendFile(path.join(dirname(new URL(import.meta.url).pathname), 'demo', 'dist', 'index.html'));
 });
 
 // Error-handling middleware
 app.use((err, req, res, next) => {
+  console.error("Error occurred:", err); // Log the error details
   const statusCode = err.statusCode || 500;
   const message = err.message || 'Internal server error';
   return res.status(statusCode).json({
