@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon api/index.js",
     "start": "node api/index.js",
-    "build": "npm install && npm install ---prefix demo && npm run build --prefix demo"
+    "build" : "npm install && npm install --prefix demo && npm run build --prefix demo"
   },
   "keywords": [],
   "author": "",
@@ -21,8 +21,7 @@
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.10.0",
-    "mongoose": "^8.7.2",
-    "path": "^0.12.7"
+    "mongoose": "^8.7.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
